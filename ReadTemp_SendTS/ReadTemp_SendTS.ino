@@ -43,20 +43,29 @@ void setup() {
   ESP8266.println("AT+RST"); // this check the ESP8266.
   Serial.println("AT+RST");
   delay(2000);
+  // test connection
   ESP8266.println("AT");
   Serial.println("AT");
   delay(2000);
   if (ESP8266.find("OK")) {
-    Serial.println("OK");
     Serial.println("Connected");
-  } else 
+  } else
     Serial.println("Lost Connection to ESP8266");
-}
 
+  // connect to wifi  "not tested"
+  ESP8266.println("AT+CWQAP");  //disconnect from old connection
+  delay(2000);
+  ESP8266.println("AT+CWJAP=\"your_wireless_name\",\"wour_wireless_passwd\"");  // join wifi auto, edit your wireless name and passwd here
+  Serial.println("AT+CWJAPT");
+  delay(2000);
+  if (ESP8266.find("OK")) {
+    Serial.println("Connected");
+  } else
+    Serial.println("Can't Connection to wireless network.");
+}
 
 // the loop routine runs over and over again forever:
 void loop(void) {
-
   digitalWrite(13, HIGH); //LED on when program work :))
 
   if ( !ds.search(addr)) {
@@ -165,8 +174,6 @@ void update(String value, String field) {
     Serial.println(" Update Data to Thinkspeak...");
     delay(5000);
     Serial.println("> OK!!!");
-
-
   }
   else {
     ESP8266.print("AT+CIPCLOSE");
